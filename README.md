@@ -29,17 +29,17 @@ Import AnimatedButtonSPM
 ### Usage
 
 ```
-Create the button component
+1 - Create the button component
    let animatedButton = configure(AnimatedButton()) {
         $0.backgroundColor = .red
         $0.clipsToBounds = true
         $0.setTitle("SIGN UP", for: .normal)
     }
 ```
-#### 1
+
 ```
-Add to the view. If you want to animate your button you should not put constraints at the edges, 
-but center in superView.
+2 - Add to the view. If you want to animate your button you should not put constraints at the edges, 
+    but center in superView.
 
 view.add(animatedButton) {
    $0.centerInSuperview(size: .init(width: buttonSize.width, height: buttonSize.height))
@@ -48,7 +48,7 @@ view.add(animatedButton) {
 ```
 
 ```
-### Call bindableCompletedTouch that is a subscription for touchInside
+3 - Call bindableCompletedTouch that is a subscription for touchInside
 
 view.add(animatedButton) {
    $0.centerInSuperview(size: .init(width: buttonSize.width, height: buttonSize.height))
@@ -59,7 +59,7 @@ view.add(animatedButton) {
 ```
 
 ```
-### Call animateButtonActivity setting to true or false when you need.
+4 - Call animateButtonActivity setting to true or false when you need.
 
 @objc private func handleTouchAnimatedButton() {
   if animatedButton.tag == 0 {
