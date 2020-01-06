@@ -38,8 +38,8 @@ Import AnimatedButtonSPM
 ```
 
 ```
-2 - Add to the view. If you want to animate your button you should not put constraints at the edges, 
-    but center in superView.
+2 - Add the button to the view. If you want to animate your button you should not put constraints at the edges,  
+    but center in superView..
 
       view.add(animatedButton) {
          $0.centerInSuperview(size: .init(width: buttonSize.width, height: buttonSize.height))
