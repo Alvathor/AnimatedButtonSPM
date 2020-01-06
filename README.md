@@ -39,7 +39,31 @@ Create the button component
 Add to the view. If you want to animate your button you should not put constraints at the edges, but center in superView.
    view.add(animatedButton) {
             $0.centerInSuperview(size: .init(width: buttonSize.width, height: buttonSize.height))
+            $0.layer.cornerRadius = buttonSize.height / 2
             ...            
+```
+
+```
+Call bindableCompletedTouch that is a subscription for touchInside
+view.add(animatedButton) {
+            $0.centerInSuperview(size: .init(width: buttonSize.width, height: buttonSize.height))
+            $0.layer.cornerRadius = buttonSize.height / 2
+            $0.bindableCompletedTouch.bind { _ in
+                self.handleTouchAnimatedButton()
+            }
+```
+
+```
+Call animateButtonActivity setting to true or false when you need.
+    @objc private func handleTouchAnimatedButton() {
+        if animatedButton.tag == 0 {
+            animatedButton.tag = 1
+            animatedButton.animateButtonActivity(hasActivity: true)
+        } else {
+            animatedButton.tag = 0
+            animatedButton.animateButtonActivity(hasActivity: false)
+        }
+    }
 ```
 
 End with an example of getting some data out of the system or using it for a little demo
