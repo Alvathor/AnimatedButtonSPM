@@ -27,7 +27,19 @@ Import AnimatedButtonSPM
 ```
 
 ```
-until finished
+Create the button component
+   let animatedButton = configure(AnimatedButton()) {
+        $0.backgroundColor = .red
+        $0.clipsToBounds = true
+        $0.setTitle("SIGN UP", for: .normal)
+    }
+```
+
+```
+Add to the view. If you want to animate your button you should not put constraints at the edges, but center in superView.
+   view.add(animatedButton) {
+            $0.centerInSuperview(size: .init(width: buttonSize.width, height: buttonSize.height))
+            ...            
 ```
 
 End with an example of getting some data out of the system or using it for a little demo
