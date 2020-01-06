@@ -26,6 +26,8 @@ Add https://github.com/Alvathor/AnimatedButtonSPM to your project
 Import AnimatedButtonSPM
 ```
 
+### Usage
+
 ```
 Create the button component
    let animatedButton = configure(AnimatedButton()) {
@@ -34,15 +36,15 @@ Create the button component
         $0.setTitle("SIGN UP", for: .normal)
     }
 ```
-
+#### 1
 ```
-### Add to the view. If you want to animate your button you should not put constraints at the edges, 
-### but center in superView.
+Add to the view. If you want to animate your button you should not put constraints at the edges, 
+but center in superView.
 
-   view.add(animatedButton) {
-      $0.centerInSuperview(size: .init(width: buttonSize.width, height: buttonSize.height))
-      $0.layer.cornerRadius = buttonSize.height / 2
-   ...            
+view.add(animatedButton) {
+   $0.centerInSuperview(size: .init(width: buttonSize.width, height: buttonSize.height))
+   $0.layer.cornerRadius = buttonSize.height / 2
+...            
 ```
 
 ```
