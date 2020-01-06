@@ -1,15 +1,8 @@
 # AnimatedButtonSPM
 
-This button subclass has touch events mapped, its react when user touch,  scaling down and than getting back to the original size.
-It has also a spin animation with a activityview that is optional.
+This button subclass has touch events mapped, its react when user touch,  scaling down and than getting back to the original size. It has also a spin animation with a activityview that is optional.
 
 <img height="30%" width="30%" src="https://github.com/Alvathor/AnimatedButtonSPM/blob/master/ezgif.com-video-to-gif.gif" alt="AnimatedButton.gif"></img>
-
-
-
-# AnimatedButtonSPM
-
-This button subclass has touch events mapped, its react when user touch,  scaling down and than getting back to the original size. It has also a spin animation with a activityview that is optional.
 
 ### Prerequisites
 
