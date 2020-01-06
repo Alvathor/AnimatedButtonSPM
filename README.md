@@ -72,9 +72,6 @@ Import AnimatedButtonSPM
       }
 ```
 
-End with an example of getting some data out of the system or using it for a little demo
-
-
 ## Authors
 
 * **Juliano Alvarenga** - *Initial work* - [PurpleBooth](https://github.com/Alvathor)
