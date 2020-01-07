@@ -8,29 +8,29 @@
 import UIKit
 import UIViewExtensionsSPM
 
-/// This button subclass has Touch events mapped, its react sacling down when user touch
+/// This button subclass has touch events mapped, its react when user touch,
+/// scaling down and than getting back to the original size.
 public class AnimatedButton: UIButton {
     
     var initialFrame: CGRect = {
           let c = CGRect()
           return c
     }()
-      
-    let activityIndicatorView: UIActivityIndicatorView = {
-        let c = UIActivityIndicatorView()
-        c.hidesWhenStopped = true
-        c.style = .white
-        return c
-    }()
     
-    public var bindableCompletedTouch = Bindable<Bool>()
+    //Default Values
     var scaleDownFactor: CGFloat = 0.9
     var scaleUpFactor: CGFloat = 1
     var springWithDamping: CGFloat = 0.8
     var springVelocity: CGFloat = 1
     var duration: TimeInterval = 0.3
     var delay: TimeInterval = 0
+    public var bindableCompletedTouch = Bindable<Bool>()
     
+    public let activityIndicatorView = configure(UIActivityIndicatorView()) {
+        $0.hidesWhenStopped = true
+    }
+    
+    //Optional Setup
     public func setupAnimation(scaleDownFactor: CGFloat, scaleUpFactor: CGFloat, springWithDamping: CGFloat,
                                springVelocity: CGFloat, duration: TimeInterval, delay: TimeInterval) {
         self.scaleDownFactor = scaleDownFactor
@@ -51,8 +51,7 @@ public class AnimatedButton: UIButton {
         addSubview(activityIndicatorView)
     }
     
-    //MARK: Touch events
-    @objc func handleTouchDown()  {
+    fileprivate func defaulAnimation(_ animation:@escaping() -> Void) {
         UIView.animate(
             withDuration: duration,
             delay: delay,
@@ -60,67 +59,58 @@ public class AnimatedButton: UIButton {
             initialSpringVelocity: springVelocity,
             options: .curveEaseOut,
             animations: {
-                self.transform = CGAffineTransform(scaleX: self.scaleDownFactor, y: self.scaleDownFactor )
+                animation()
         })
+    }
+    
+    fileprivate func defaulAnimationWithCompletion(_ animation:@escaping() -> Void, _ completion: @escaping() -> Void) {
+        UIView.animate(
+            withDuration: duration,
+            delay: delay,
+            usingSpringWithDamping: springWithDamping,
+            initialSpringVelocity: springVelocity,
+            options: .curveEaseOut,
+            animations: {
+                animation()
+        }) { (_) in
+            completion()
+        }
+    }
+    
+    //MARK: Touch events
+    @objc func handleTouchDown()  {
+        defaulAnimation { 
+            self.transform = CGAffineTransform(scaleX: self.scaleDownFactor, y: self.scaleDownFactor )
+        }
     }
 
     @objc func handleTouchUpInside()  {
-        UIView.animate(
-            withDuration: duration,
-            delay: delay,
-            usingSpringWithDamping: springWithDamping,
-            initialSpringVelocity: springVelocity,
-            options: .curveEaseOut,
-            animations: {
-                self.transform = CGAffineTransform(scaleX: self.scaleDownFactor, y: self.scaleDownFactor )
-        }) { (_) in
-            UIView.animate(
-                withDuration: self.duration,
-                delay: self.delay,
-                usingSpringWithDamping: self.springWithDamping,
-                initialSpringVelocity: self.springVelocity,
-                options: .curveEaseOut,
-                animations: {
-                    self.transform = CGAffineTransform(scaleX: self.scaleUpFactor, y: self.scaleUpFactor )
-                    self.bindableCompletedTouch.value = true
-            })
+        defaulAnimationWithCompletion({
+            self.transform = CGAffineTransform(scaleX: self.scaleDownFactor, y: self.scaleDownFactor )
+        }) {
+            self.defaulAnimation {
+                self.transform = CGAffineTransform(scaleX: self.scaleUpFactor, y: self.scaleUpFactor )
+                self.bindableCompletedTouch.value = true
+            }
         }
     }
     
     @objc func handleTouchDragExit()  {
-        UIView.animate(
-            withDuration: duration,
-            delay: delay,
-            usingSpringWithDamping: springWithDamping,
-            initialSpringVelocity: springVelocity,
-            options: .curveEaseOut,
-            animations: {
-                self.transform = CGAffineTransform(scaleX: self.scaleUpFactor, y: self.scaleUpFactor )
-        })
+        defaulAnimation {
+             self.transform = CGAffineTransform(scaleX: self.scaleUpFactor, y: self.scaleUpFactor )
+        }
     }
     
     @objc func handleTouchDragEnter()  {
-        UIView.animate(
-            withDuration: duration,
-            delay: delay,
-            usingSpringWithDamping: springWithDamping,
-            initialSpringVelocity: springVelocity,
-            options: .curveEaseOut,
-            animations: {
-                self.transform = CGAffineTransform(scaleX: self.scaleDownFactor, y: self.scaleDownFactor )
-        })
+        defaulAnimation {
+            self.transform = CGAffineTransform(scaleX: self.scaleDownFactor, y: self.scaleDownFactor )
+        }
     }
     
     @objc func handleTouchCancel()  {
-        UIView.animate(
-            withDuration: duration,
-            delay: delay,
-            usingSpringWithDamping: springWithDamping,
-            initialSpringVelocity: springVelocity,
-            options: .curveEaseOut,
-            animations: {
-                self.transform = CGAffineTransform(scaleX: self.scaleUpFactor, y: self.scaleUpFactor )
-        })
+        defaulAnimation {
+            self.transform = CGAffineTransform(scaleX: self.scaleUpFactor, y: self.scaleUpFactor )
+        }
     }
 }
 
@@ -136,34 +126,22 @@ public extension AnimatedButton {
             self.titleLabel?.alpha = 0
             if hasActivity {
                 self.centerInSuperview(size: .init(width: self.bounds.height, height: self.bounds.height))
-                UIView.animate(
-                    withDuration: self.duration,
-                    delay: self.delay,
-                    usingSpringWithDamping: self.springWithDamping,
-                    initialSpringVelocity: self.springVelocity,
-                    options: .curveEaseOut,
-                    animations: {
+                    self.defaulAnimationWithCompletion({
                         self.layoutIfNeeded()
                         self.activityIndicatorView.centerInSuperview()
-                    }, completion: { _ in
+                    }, {
                         self.activityIndicatorView.startAnimating()
-                })
+                    })
             } else {
                 let size = CGSize(width: self.initialFrame.width, height: self.initialFrame.height)
                 self.centerInSuperview(size: size)
-                UIView.animate(
-                    withDuration: self.duration,
-                    delay: self.delay,
-                    usingSpringWithDamping: self.springWithDamping,
-                    initialSpringVelocity: self.springVelocity,
-                    options: .curveEaseOut,
-                    animations: {
-                        self.titleLabel?.alpha = 1
-                        self.layoutIfNeeded()
-                        self.activityIndicatorView.centerInSuperview()
-                    }, completion: { _ in
-                        self.activityIndicatorView.stopAnimating()
-                })
+                self.defaulAnimationWithCompletion({
+                    self.titleLabel?.alpha = 1
+                    self.layoutIfNeeded()
+                    self.activityIndicatorView.centerInSuperview()
+                }) {
+                    self.activityIndicatorView.stopAnimating()
+                }
             }
         }
     }
