@@ -51,7 +51,7 @@ public class AnimatedButton: UIButton {
         addSubview(activityIndicatorView)
     }
     
-    fileprivate func defaulAnimation(_ animation:@escaping() -> Void) {
+    fileprivate func defaultAnimation(_ animation:@escaping() -> Void) {
         UIView.animate(
             withDuration: duration,
             delay: delay,
@@ -63,7 +63,7 @@ public class AnimatedButton: UIButton {
         })
     }
     
-    fileprivate func defaulAnimationWithCompletion(_ animation:@escaping() -> Void, _ completion: @escaping() -> Void) {
+    fileprivate func defaultAnimationWithCompletion(_ animation:@escaping() -> Void, _ completion: @escaping() -> Void) {
         UIView.animate(
             withDuration: duration,
             delay: delay,
@@ -79,16 +79,16 @@ public class AnimatedButton: UIButton {
     
     //MARK: Touch events
     @objc func handleTouchDown()  {
-        defaulAnimation { 
+        defaultAnimation {
             self.transform = CGAffineTransform(scaleX: self.scaleDownFactor, y: self.scaleDownFactor )
         }
     }
 
     @objc func handleTouchUpInside()  {
-        defaulAnimationWithCompletion({
+        defaultAnimationWithCompletion({
             self.transform = CGAffineTransform(scaleX: self.scaleDownFactor, y: self.scaleDownFactor )
         }) {
-            self.defaulAnimation {
+            self.defaultAnimation {
                 self.transform = CGAffineTransform(scaleX: self.scaleUpFactor, y: self.scaleUpFactor )
                 self.bindableCompletedTouch.value = true
             }
@@ -96,19 +96,19 @@ public class AnimatedButton: UIButton {
     }
     
     @objc func handleTouchDragExit()  {
-        defaulAnimation {
+        defaultAnimation {
              self.transform = CGAffineTransform(scaleX: self.scaleUpFactor, y: self.scaleUpFactor )
         }
     }
     
     @objc func handleTouchDragEnter()  {
-        defaulAnimation {
+        defaultAnimation {
             self.transform = CGAffineTransform(scaleX: self.scaleDownFactor, y: self.scaleDownFactor )
         }
     }
     
     @objc func handleTouchCancel()  {
-        defaulAnimation {
+        defaultAnimation {
             self.transform = CGAffineTransform(scaleX: self.scaleUpFactor, y: self.scaleUpFactor )
         }
     }
@@ -126,7 +126,7 @@ public extension AnimatedButton {
             self.titleLabel?.alpha = 0
             if hasActivity {
                 self.centerInSuperview(size: .init(width: self.bounds.height, height: self.bounds.height))
-                    self.defaulAnimationWithCompletion({
+                    self.defaultAnimationWithCompletion({
                         self.layoutIfNeeded()
                         self.activityIndicatorView.centerInSuperview()
                     }, {
@@ -135,7 +135,7 @@ public extension AnimatedButton {
             } else {
                 let size = CGSize(width: self.initialFrame.width, height: self.initialFrame.height)
                 self.centerInSuperview(size: size)
-                self.defaulAnimationWithCompletion({
+                self.defaultAnimationWithCompletion({
                     self.titleLabel?.alpha = 1
                     self.layoutIfNeeded()
                     self.activityIndicatorView.centerInSuperview()
