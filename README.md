@@ -25,6 +25,7 @@ Import AnimatedButtonSPM
 ```
 1 - Create the button component
       let animatedButton = configure(AnimatedButton()) {
+        $0.activityIndicatorView.color = .white
         $0.backgroundColor = .red
         $0.clipsToBounds = true
         $0.setTitle("SIGN UP", for: .normal)
